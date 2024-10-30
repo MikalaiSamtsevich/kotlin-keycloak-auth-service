@@ -61,7 +61,6 @@ class UserServiceImpl(
     override suspend fun getAccessToken(userLoginRecord: UserLoginRecord): AccessTokenResponse {
         val body = buildKeycloakFormBody(
             keycloakConfig.userClientId,
-            keycloakConfig.clientSecret,
             keycloakConfig.grantType,
             userLoginRecord.username,
             userLoginRecord.password
