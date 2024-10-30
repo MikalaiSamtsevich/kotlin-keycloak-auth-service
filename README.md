@@ -46,6 +46,9 @@ docker-compose -f compose-app.yml build
 docker-compose -f compose-app.yml up
 ```
 
+## Access the Swagger Documentation:
+http://localhost:8092/keycloak-auth-service-docs/webjars/swagger-ui/index.html
+
 ## Keycloak Endpoint
 
 - **Keycloak Administration UI**: Accessible at `http://localhost:9082` (Login: `admin/admin`).
