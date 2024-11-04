@@ -78,21 +78,21 @@ class UserServiceImpl(
 
     fun userDtoToRepresentation(newUserRecord: NewUserRecord): UserRepresentation {
         val userRepresentation: UserRepresentation = UserRepresentation().apply {
-            isEnabled = true;
-            setUsername(newUserRecord.username);
-            setEmail(newUserRecord.email);
-            setFirstName(newUserRecord.username);
-            setLastName(newUserRecord.lastname);
-            setCreatedTimestamp(System.currentTimeMillis());
-            isEmailVerified = false;
+            isEnabled = true
+            username = newUserRecord.username
+            email = newUserRecord.email
+            firstName = newUserRecord.username
+            lastName = newUserRecord.lastname
+            createdTimestamp = System.currentTimeMillis()
+            isEmailVerified = false
         }
 
         val credentialRepresentation: CredentialRepresentation = CredentialRepresentation().apply {
-            value = newUserRecord.password;
-            type = CredentialRepresentation.PASSWORD;
+            value = newUserRecord.password
+            type = CredentialRepresentation.PASSWORD
         }
 
-        userRepresentation.setCredentials(listOf(credentialRepresentation));
+        userRepresentation.credentials = listOf(credentialRepresentation)
         return userRepresentation
     }
 
