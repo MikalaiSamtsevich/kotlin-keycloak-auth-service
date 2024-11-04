@@ -12,7 +12,8 @@ import org.springframework.web.server.ResponseStatusException
 import reactor.core.publisher.Mono
 
 @Service
-class RoleServiceImpl(val keycloakConfig: KeycloakConfig, val keycloakAdminRestApi: KeycloakAdminRestApi) : RoleService {
+class RoleServiceImpl(val keycloakConfig: KeycloakConfig,
+                      val keycloakAdminRestApi: KeycloakAdminRestApi) : RoleService {
 
     val webClient = WebClient.builder()
         .baseUrl(keycloakConfig.serverUrl)

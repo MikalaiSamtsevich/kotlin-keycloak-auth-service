@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -23,36 +24,30 @@ class UserApi(val userService: UserService) {
         @RequestParam(required = false) idpUserId: String?,
         @RequestParam(required = false) max: Int?,
         @RequestParam(required = false) username: String?
-    ): List<UserRepresentation> {
-        return userService.getUsers(
-            email,
-            idpAlias,
-            idpUserId,
-            max,
-            username
-        )
-    }
+    ): List<UserRepresentation> =
+        userService.getUsers(email, idpAlias, idpUserId, max, username)
+
 
     @GetMapping("/{id}")
-    suspend fun getUser(@PathVariable id: String): ResponseEntity<UserRepresentation> {
-        return ResponseEntity.ok(userService.findUserById(id))
-    }
+    suspend fun getUser(@PathVariable id: String):
+            ResponseEntity<UserRepresentation> =
+        ResponseEntity.ok(userService.findUserById(id))
 
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    suspend fun deleteUser(@PathVariable id: String): ResponseEntity<Unit> {
+    suspend fun deleteUser(@PathVariable id: String) =
         userService.deleteUser(id)
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build<Unit>()
-    }
 
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/reset-password-email")
-    suspend fun forgotPassword(@RequestParam username: String): ResponseEntity<Unit> {
+    suspend fun forgotPassword(@RequestParam username: String) =
         userService.forgotPassword(username)
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build<Unit>()
-    }
 
+
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}/send-verify-email/")
-    suspend fun sendVerifyEmail(@PathVariable id: String): ResponseEntity<Unit> {
+    suspend fun sendVerifyEmail(@PathVariable id: String) =
         userService.sendVerificationEmail(id)
-        return ResponseEntity.ok().build<Unit>()
-    }
 }

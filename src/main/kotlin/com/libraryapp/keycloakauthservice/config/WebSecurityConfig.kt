@@ -50,12 +50,14 @@ class WebSecurityConfig(private val keycloakJwtAuthenticationConverter: Keycloak
     @Bean
     fun corsFilter(): CorsWebFilter {
         val source = UrlBasedCorsConfigurationSource()
-        val config = CorsConfiguration()
-        config.allowCredentials = true
-        config.addAllowedOrigin("http://localhost:8091")
-        config.addAllowedOriginPattern("http://localhost:8091/**")
-        config.addAllowedHeader("*")
-        config.addAllowedMethod("*")
+        val config = CorsConfiguration().apply {
+            allowCredentials = true
+            addAllowedOrigin("http://localhost:8091")
+            addAllowedOriginPattern("http://localhost:8091/**")
+            addAllowedHeader("*")
+            addAllowedMethod("*")
+        }
+
         source.registerCorsConfiguration("/**", config)
         return CorsWebFilter(source)
     }

@@ -27,7 +27,6 @@ class KeycloakAdminRestApi(private val keycloakConfig: KeycloakConfig) {
                 .retrieve()
                 .awaitBody<AccessTokenResponse>()
         } catch (e: Exception) {
-            println("Error occurred: ${e.message}")
             throw e
         }
     }

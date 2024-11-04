@@ -1,32 +1,30 @@
 package com.libraryapp.keycloakauthservice.exception
 
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError
-import org.springframework.validation.ObjectError
-import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.support.WebExchangeBindException
 import org.springframework.web.server.ResponseStatusException
-import java.util.HashMap
-import java.util.function.Consumer
 
 @ControllerAdvice
 class GlobalExceptionHandler {
-    @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleValidationExceptions(
-        ex: MethodArgumentNotValidException
-    ): ResponseEntity<MutableMap<String, String>> {
-        val errors: MutableMap<String, String> = HashMap<String, String>()
-        ex.bindingResult.allErrors.forEach(Consumer { error: ObjectError ->
+
+    @ExceptionHandler(WebExchangeBindException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    suspend fun handleWebExchangeBindException(ex: WebExchangeBindException): ResponseEntity<Map<String, String>> {
+        val errors = ex.bindingResult.allErrors.associate { error ->
             val fieldName = (error as FieldError).field
-            val errorMessage = error.defaultMessage
-            errors.put(fieldName, errorMessage.toString())
-        })
-        return ResponseEntity.badRequest().body<MutableMap<String, String>>(errors)
+            val errorMessage = error.defaultMessage ?: "Invalid value"
+            fieldName to errorMessage
+        }
+        return ResponseEntity(errors, HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(ResponseStatusException::class)
-    fun handleResponseStatusException(ex: ResponseStatusException): ResponseEntity<String> {
+    suspend fun handleResponseStatusException(ex: ResponseStatusException): ResponseEntity<String> {
         return ResponseEntity.status(ex.statusCode).body<String>(ex.reason)
     }
 }

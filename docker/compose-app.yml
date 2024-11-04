@@ -63,7 +63,7 @@ services:
   keycloak-auth-service:
     image: keycloak-auth-service:latest
     build:
-      context: ..
+      context: ../.
       args:
         DOCKER_BUILDKIT: 1
     restart: always

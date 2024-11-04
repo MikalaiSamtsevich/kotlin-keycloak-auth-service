@@ -14,12 +14,12 @@ import org.springframework.context.annotation.Configuration
 class OpenAPIConfig {
     @Bean
     fun customOpenAPI(
-        @Value("\${openapi.service.title}") serviceTitle: String?,
-        @Value("\${openapi.service.version}") serviceVersion: String?,
-        @Value("\${openapi.service.url}") url: String?
-    ): OpenAPI? {
+        @Value("\${openapi.service.title}") serviceTitle: String,
+        @Value("\${openapi.service.version}") serviceVersion: String,
+        @Value("\${openapi.service.url}") url: String
+    ): OpenAPI {
         return OpenAPI()
-            .servers(listOf<Server?>(Server().url(url)))
+            .servers(listOf<Server>(Server().url(url)))
             .info(
                 Info()
                     .title(serviceTitle).version(serviceVersion)
