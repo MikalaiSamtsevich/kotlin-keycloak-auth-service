@@ -9,7 +9,6 @@ import com.libraryapp.keycloakauthservice.util.buildKeycloakFormBody
 import org.keycloak.representations.AccessTokenResponse
 import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.UserRepresentation
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
@@ -31,11 +30,9 @@ class UserServiceImpl(
         .build()
 
     override suspend fun createUser(newUserRecord: NewUserRecord) {
-        if(newUserRecord.password != newUserRecord.passwordConfirm)
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Password mismatch")
         val tokenResp = keycloakAdminRestApi.getAccessToken()
         val userRepresentation = userDtoToRepresentation(newUserRecord)
-        userRepresentation.groups = listOf(KeycloakGroup.CUSTOMER.toString())
+        userRepresentation.groups = listOf<String>(KeycloakGroup.CUSTOMER.toString())
         webClient.post()
             .uri(keycloakConfig.userEndpoint)
             .header("Authorization", "Bearer ${tokenResp.token}")
